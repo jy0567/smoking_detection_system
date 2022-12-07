@@ -14,7 +14,7 @@
 
 ### 01-2 개발 목표
 **실내 흡연 감지를 통해 신속한 대처가 가능한 알림 시스템 개발**
-<img width="" height="" src="./image/client_result2.png"/>  
+<img width="" height="" src="./image/goal.png"/>  
 
 
 
@@ -52,8 +52,8 @@
 **세팅 농도**  
 - 약 10% 이상 : 주변 공기의 일산화탄소 농도가 평소보다 약 10% 이상 짙어지면 흡연 인지  
 - 약 20~25% :  담배 연기가 아닌 화재로 인한 짙은 연기에만 반응하므로 화재 경보로 사용  
-
-**흡연 감지 시 경고음 발생, 현재 상황을 실시간으로 모니터링할 수 있어 상황에 맞게 유동적인 대처 가능**
+  
+=> **흡연 감지 시 경고음 발생, 현재 상황을 실시간으로 모니터링할 수 있어 상황에 맞게 유동적인 대처 가능**
 
 ### 카메라
 **흡연 및 화재 감지 시 카메라 작동**
@@ -80,17 +80,19 @@
 **감지된 일산화탄소 농도 값에 따라 LED 제어**  
 흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함  
 
-<img width="" height="" src="./image/greenLed.png"/> 
+<img width="" height="" src="./image/greenLed.png"/>
+
 * Green LED
   * 주변 공기의 일산화탄소 농도가 평균치일 때
 => Green LED ON  
  
-<img width="" height="" src="./image/redLed.png"/>  
+<img width="" height="" src="./image/redLed.png"/>
+
 * Red LED
   * 주변 공기의 일산화탄소 농도가 평소보다 약 10% 이상 짙어지면 흡연으로 인지
 => Red LED ON  
 
-<img width="" height="" src="./image/yellowLed.png"/> 
+<img width="" height="" src="./image/yellowLed.png"/>
 * Yellow LED
   * 담배 연기가 아닌 화재로 인한 짙은 연기로 인식
 => Yellow LED ON
@@ -133,19 +135,20 @@
 
 
 ###  이메일 전송
-<img width="" height="" src="./image/emailSmoke.png"/>
+<img width="450" height="" src="./image/emailSmoke.png"/>
 일산화탄소 약 10% 이상  =>  흡연감지  
-
-<img width="" height="" src="./image/emailFire.png"/>
+  
+<img width="450" height="" src="./image/emailFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
+ 
  
 **이메일 전송 코드 (흡연 감지 시)**
 ```python
 
 ```
-<img width="" height="" src="./image/emailImage.png"/>
+<img width="4" height="" src="./image/emailImage.png"/>
 이메일로 전송된 사진  
-
+  
 **이메일 전송 시 발생한 문제**  
 <img width="" height="" src="./image/emailProblem.png"/>  
 
