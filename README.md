@@ -69,7 +69,7 @@
 > camera.start_preview()
 > 
 > kstDate = datetime.now() + timedelta(hours=9)
-> date = kstDate.strftime("%y%m%d_%H:%M") #한국 
+> date = kstDate.strftime("%y%m%d_%H:%M") #한국 시간 
 > 
 > imageName = '/home/pi/Images/'+date+'.jpg'
 > camera.capture(imageName)
@@ -126,7 +126,6 @@
 >       tone(buzzer, i);
 >       delay(5);
 >     }
-> 
 >     for(int i = 500; i >= 300; i--){
 >       tone(buzzer, i);
 >       delay(3);
@@ -204,9 +203,13 @@
 > <img width="450" height="" src="./image/emailFire.png"/>
 > 
 > 
+> 이메일로 전송된 사진  
+> <img width="" height="" src="./image/emailImage.png"/>
+> 
+> 
 > **이메일 전송 코드 (흡연 감지 시)**
 > ```python
-> #email 
+> #email 전송
 > smtp = smtplib.SMTP('smtp.gmail.com',587)
 > smtp.starttls()
 > smtp.login('201844016@itc.ac.kr', 'hnhtfvruuqdboqtq')
@@ -227,9 +230,6 @@
 > 
 > smtp.quit()
 > ```  
-> 
-> 이메일로 전송된 사진  
-> <img width="" height="" src="./image/emailImage.png"/>
 > 
 >   
 > **이메일 전송 시 발생한 문제**  
@@ -273,18 +273,18 @@
 > client = None
 > 
 > try:
-> 	#데이터베이스 접속 코드
+> 	   #데이터베이스 접속 코드
 >     client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
 >     except Exception as e:
 >     print ("Exception" + str(e))
 > 
 > if client is not None:
 >     try:
-> 	client.write_points(data) #write
+> 	      client.write_points(data) #write
 >     except Exception as e:
-> 	print ("Exception write " + str(e))
+> 	      print ("Exception write " + str(e))
 >     finally:
-> 	client.close()
+> 	      client.close()
 > #print("running influxdb OK")
 > ```
 
