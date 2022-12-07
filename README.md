@@ -2,6 +2,8 @@
 인하공전 무선네트워크 프로젝트  
 2조 - 김지연, 이가온, 신영진, 박준형
 
+
+
 ## 01. 프로젝트 개요
 
 ### 01-1 실내 흡연 피해 사례
@@ -15,7 +17,6 @@
 ### 01-2 개발 목표
 **실내 흡연 감지를 통해 신속한 대처가 가능한 알림 시스템 개발**
 <img width="" height="" src="./image/goal.png"/>  
-
 
 
 
@@ -95,7 +96,7 @@ camera.close()
 **감지된 일산화탄소 농도 값에 따라 LED 제어**  
 흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함  
 
-<img width="" height="" src="./image/greenLed.png"/>
+<img width="" height="" src="./image/greenLed.png"/>  
 
 * Green LED
   * 주변 공기의 일산화탄소 농도가 평균치일 때
@@ -115,6 +116,7 @@ camera.close()
  
 
 ###  부저 & LED 코드  
+
 **화재 감지**
 ```python
 if(result >= level_fire){
@@ -159,11 +161,13 @@ else if(result < level_smoke){
 }
 ```
 
-###  SMS 전송
+###  SMS 전송  
+
 **Twilio**
 - 라즈베리파이에서 관리자에게 SMS 발송을 위해 twilio 사용
 - twilio는 클라우드 상에서 SMS API, 휴대폰 인증 API, 전화서비스 등을 제공하는 사이트
 <img width="" height="" src="./image/twilio.png"/>  
+
 
 **Twilio SMS 전송 코드**
 ```python
@@ -183,11 +187,11 @@ message = client.messages.create(
 
 
 **관리자에게 메세지 전송**  
-  
-<img width="300" height="" src="./image/smsSmoke.png"/>  
+
+<img width="300" height="" src="./image/smsSmoke.png"/>
 일산화탄소 약 10% 이상  =>  흡연감지  
 
-<img width="300" height="" src="./image/smsFire.png"/>  
+<img width="300" height="" src="./image/smsFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
 
 
@@ -195,14 +199,14 @@ message = client.messages.create(
 ###  이메일 전송  
 <img width="450" height="" src="./image/emailSmoke.png"/>
 일산화탄소 약 10% 이상  =>  흡연감지  
-  
+
 <img width="450" height="" src="./image/emailFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
 
   
 **이메일 전송 코드 (흡연 감지 시)**
 ```python
-#email
+#email 
 smtp = smtplib.SMTP('smtp.gmail.com',587)
 smtp.starttls()
 smtp.login('201844016@itc.ac.kr', 'hnhtfvruuqdboqtq')
@@ -222,7 +226,7 @@ with open(file_name, 'rb')as file_FD:
     smtp.sendmail('201844016@itc.ac.kr','xogur1423@naver.com', msg.as_string())
 
 smtp.quit()
-```
+```  
 
 
 <img width="" height="" src="./image/emailImage.png"/>
@@ -257,31 +261,31 @@ $sudo pip install matplotlib 실행
 **MQ-7 센서에서 받아온 값을 데이터베이스에 입력**
 ```python
 data = [{
-		    'measurement' : 'pir',        
-		    'tags':{
-			'VisionUni' : '2410',
-		    },
-		    'fields':{
-			"date": date,            #측정 날짜
-			"concentration" : res    #측정 데이터 값
-		    }
-		}]
-		client = None
+    'measurement' : 'pir',        
+    'tags':{
+	'VisionUni' : '2410',
+    },
+    'fields':{
+	"date": date,            #측정 날짜
+	"concentration" : res    #측정 데이터 값
+    }
+}]
+client = None
 
-		try:
-        #데이터베이스 접속 코드
-		    client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
-		except Exception as e:
-		    print ("Exception" + str(e))
+try:
+	#데이터베이스 접속 코드
+    client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
+    except Exception as e:
+    print ("Exception" + str(e))
 
-		if client is not None:
-		    try:
-			client.write_points(data) #write
-		    except Exception as e:
-			print ("Exception write " + str(e))
-		    finally:
-			client.close()
-		#print("running influxdb OK")
+if client is not None:
+    try:
+	client.write_points(data) #write
+    except Exception as e:
+	print ("Exception write " + str(e))
+    finally:
+	client.close()
+#print("running influxdb OK")
 ```
 
 
