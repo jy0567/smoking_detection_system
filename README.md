@@ -273,18 +273,18 @@
 > client = None
 > 
 > try:
-> 	   #데이터베이스 접속 코드
+>     #데이터베이스 접속 코드
 >     client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
 >     except Exception as e:
 >     print ("Exception" + str(e))
 > 
 > if client is not None:
 >     try:
-> 	      client.write_points(data) #write
+> 	 client.write_points(data) #write
 >     except Exception as e:
-> 	      print ("Exception write " + str(e))
+> 	 print ("Exception write " + str(e))
 >     finally:
-> 	      client.close()
+> 	 client.close()
 > #print("running influxdb OK")
 > ```
 
