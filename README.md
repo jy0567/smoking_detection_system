@@ -59,6 +59,21 @@
 **흡연 및 화재 감지 시 카메라 작동**
 <img width="" height="" src="./image/camera.png"/>  
 
+```python
+#camera
+camera = PiCamera()
+
+camera.start_preview()
+
+kstDate = datetime.now() + timedelta(hours=9)
+date = kstDate.strftime("%y%m%d_%H:%M") #한국 
+
+imageName = '/home/pi/Images/'+date+'.jpg'
+camera.capture(imageName)
+camera.stop_preview()
+camera.close()
+
+```
 **카메라 작동 조작 시 고려한 점**  
 일산화탄소 센서 값은 1초에 한 번씩 측정되므로 흡연 및 화재 감지 시 1초마다 카메라가 작동하게 됨  
 
@@ -85,33 +100,63 @@
 * Green LED
   * 주변 공기의 일산화탄소 농도가 평균치일 때
 => Green LED ON  
- 
+   
 <img width="" height="" src="./image/redLed.png"/>
 
 * Red LED
   * 주변 공기의 일산화탄소 농도가 평소보다 약 10% 이상 짙어지면 흡연으로 인지
 => Red LED ON  
-
+  
 <img width="" height="" src="./image/yellowLed.png"/>
+
 * Yellow LED
   * 담배 연기가 아닌 화재로 인한 짙은 연기로 인식
 => Yellow LED ON
  
 
 ###  부저 & LED 코드  
-**흡연 감지**
-```python
-
-```
-
 **화재 감지**
 ```python
+if(result >= level_fire){
+    digitalWrite(yellowLed,HIGH);
+    digitalWrite(redLed,LOW);
+    digitalWrite(greenLed,LOW);
 
+    for(int i = 300; i <= 500; i++){
+      tone(buzzer, i);
+      delay(5);
+    }
+
+    for(int i = 500; i >= 300; i--){
+      tone(buzzer, i);
+      delay(3);
+    }
+}
+```
+
+**흡연 감지**
+```python
+ else if (result>=level_smoke && result<level_fire){
+    digitalWrite(redLed,HIGH);
+    digitalWrite(greenLed,LOW);
+    digitalWrite(yellowLed,LOW);
+
+    for(int freq=150; freq<= 1800; freq=freq+2){
+       tone(buzzer,freq,10);
+    }
+    for(int freq=1800; freq>= 150; freq=freq-2){
+       tone(buzzer,freq,10);
+    }
+}
 ```
 
 **아무것도 감지되지 않았을 때**
 ```python
-
+else if(result < level_smoke){
+    digitalWrite(greenLed,HIGH);
+    digitalWrite(redLed,LOW);
+    digitalWrite(yellowLed,LOW);
+}
 ```
 
 ###  SMS 전송
@@ -122,10 +167,23 @@
 
 **Twilio SMS 전송 코드**
 ```python
-
+#sms 전송을 위한 선언
+account_sid = 'ACae2d626835186e8a2a307620dc47af78'  #부여받은 ID
+auth_token = 'd7c5ef6178d69277dfa17762a631e6d1'     #부여받은 Token
+client = Client(account_sid, auth_token)
+```
+```python
+#sms 전송
+message = client.messages.create(
+    body='Smoking detected! Please check.',  #메세지 내용
+    from_='+14254752226',   #부여 받은(메시지를 보낼) 전화번호
+    to='+821083846247'      #메세지를 받을 전화번호
+)
 ```
 
+
 **관리자에게 메세지 전송**  
+  
 <img width="300" height="" src="./image/smsSmoke.png"/>  
 일산화탄소 약 10% 이상  =>  흡연감지  
 
@@ -134,19 +192,40 @@
 
 
 
-###  이메일 전송
+###  이메일 전송  
 <img width="450" height="" src="./image/emailSmoke.png"/>
 일산화탄소 약 10% 이상  =>  흡연감지  
   
 <img width="450" height="" src="./image/emailFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
- 
- 
+
+  
 **이메일 전송 코드 (흡연 감지 시)**
 ```python
+#email
+smtp = smtplib.SMTP('smtp.gmail.com',587)
+smtp.starttls()
+smtp.login('201844016@itc.ac.kr', 'hnhtfvruuqdboqtq')
 
+msg = MIMEMultipart()
+
+msg['Subject'] = '[caution] Smoking detected! Occurrence Date: '+date
+msg['To'] = 'xogur1423@naver.com'
+text = MIMEText('send photo')
+msg.attach(text)
+file_name=imageName
+
+with open(file_name, 'rb')as file_FD:
+    etcPart = MIMEApplication(file_FD.read())
+    etcPart.add_header('Content-Disposition','attachment', filename=file_name)
+    msg.attach(etcPart)
+    smtp.sendmail('201844016@itc.ac.kr','xogur1423@naver.com', msg.as_string())
+
+smtp.quit()
 ```
-<img width="4" height="" src="./image/emailImage.png"/>
+
+
+<img width="" height="" src="./image/emailImage.png"/>
 이메일로 전송된 사진  
   
 **이메일 전송 시 발생한 문제**  
@@ -177,7 +256,32 @@ $sudo pip install matplotlib 실행
 
 **MQ-7 센서에서 받아온 값을 데이터베이스에 입력**
 ```python
+data = [{
+		    'measurement' : 'pir',        
+		    'tags':{
+			'VisionUni' : '2410',
+		    },
+		    'fields':{
+			"date": date,            #측정 날짜
+			"concentration" : res    #측정 데이터 값
+		    }
+		}]
+		client = None
 
+		try:
+        #데이터베이스 접속 코드
+		    client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
+		except Exception as e:
+		    print ("Exception" + str(e))
+
+		if client is not None:
+		    try:
+			client.write_points(data) #write
+		    except Exception as e:
+			print ("Exception write " + str(e))
+		    finally:
+			client.close()
+		#print("running influxdb OK")
 ```
 
 
