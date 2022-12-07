@@ -55,7 +55,21 @@
 > - 약 20~25% :  담배 연기가 아닌 화재로 인한 짙은 연기에만 반응하므로 화재 경보로 사용  
 >   
 > => **흡연 감지 시 경고음 발생, 현재 상황을 실시간으로 모니터링할 수 있어 상황에 맞게 유동적인 대처 가능**
-
+> 
+> ```python
+> if seri.readable():
+> 			ret = seri.readline()
+> 			ret = ret[:len(ret)-1].decode()
+> 			print(ret) 
+> 			if ret.find(" ppm") > -1: 
+> 				ret = ret.replace(' ppm', '') 
+> 				ret = ret.replace(' ', '')
+> 				res = ret.split(":")[1]
+> 				print("res: "+ res)
+> 				
+> 				#아두이노에서 받아온 값을 확인 후 작업 수행(카메라 촬영, sms/email 전송)
+> 				check_smoke(res)
+> ```
 
 > ### 카메라
 > **흡연 및 화재 감지 시 카메라 작동**
