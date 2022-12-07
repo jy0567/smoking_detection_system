@@ -58,17 +58,17 @@
 > 
 > ```python
 > if seri.readable():
-> 			ret = seri.readline()
-> 			ret = ret[:len(ret)-1].decode()
-> 			print(ret) 
-> 			if ret.find(" ppm") > -1: 
-> 				ret = ret.replace(' ppm', '') 
-> 				ret = ret.replace(' ', '')
-> 				res = ret.split(":")[1]
-> 				print("res: "+ res)
+> 	ret = seri.readline()
+> 	ret = ret[:len(ret)-1].decode()
+> 	print(ret) 
+> 	if ret.find(" ppm") > -1: 
+> 		ret = ret.replace(' ppm', '') 
+> 		ret = ret.replace(' ', '')
+> 		res = ret.split(":")[1]
+> 		print("res: "+ res)
 > 				
-> 				#아두이노에서 받아온 값을 확인 후 작업 수행(카메라 촬영, sms/email 전송)
-> 				check_smoke(res)
+> 		#아두이노에서 받아온 값을 확인 후 작업 수행(카메라 촬영, sms/email 전송)
+> 		check_smoke(res)
 > ```
 
 > ### 카메라
