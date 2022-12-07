@@ -60,6 +60,7 @@
 **흡연 및 화재 감지 시 카메라 작동**
 <img width="" height="" src="./image/camera.png"/>  
 
+###  카메라 작동 코드  
 ```python
 #camera
 camera = PiCamera()
@@ -87,16 +88,10 @@ camera.close()
 - 흡연 감지 시: 1분 delay, 화재 감지 시: 30초 delay  
 
 
-### 수동 부저(피에로 부저) 제어  
-
-**감지된 일산화탄소 농도 값에 따라 수동 부저 제어**  
-흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함
-
 ###  LED 제어  
 **감지된 일산화탄소 농도 값에 따라 LED 제어**  
-흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함  
 
-<img width="" height="" src="./image/greenLed.png"/>  
+<img width="" height="" src="./image/greenLed.png"/>
 
 * Green LED
   * 주변 공기의 일산화탄소 농도가 평균치일 때
@@ -112,10 +107,16 @@ camera.close()
 
 * Yellow LED
   * 담배 연기가 아닌 화재로 인한 짙은 연기로 인식
-=> Yellow LED ON
+=> Yellow LED ON  
  
+ 
+### 수동 부저(피에로 부저) 제어  
 
-###  부저 & LED 코드  
+**감지된 일산화탄소 농도 값에 따라 수동 부저 제어**  
+흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함
+
+
+###  LED 및 부저 작동 코드  
 
 **화재 감지**
 ```python
@@ -188,22 +189,24 @@ message = client.messages.create(
 
 **관리자에게 메세지 전송**  
 
-<img width="300" height="" src="./image/smsSmoke.png"/>
 일산화탄소 약 10% 이상  =>  흡연감지  
+<img width="300" height="" src="./image/smsSmoke.png"/>  
 
-<img width="300" height="" src="./image/smsFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
+<img width="300" height="" src="./image/smsFire.png"/>
+
 
 
 
 ###  이메일 전송  
-<img width="450" height="" src="./image/emailSmoke.png"/>
+
 일산화탄소 약 10% 이상  =>  흡연감지  
+<img width="450" height="" src="./image/emailSmoke.png"/>
 
-<img width="450" height="" src="./image/emailFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
+<img width="450" height="" src="./image/emailFire.png"/>
 
-  
+
 **이메일 전송 코드 (흡연 감지 시)**
 ```python
 #email 
@@ -228,25 +231,25 @@ with open(file_name, 'rb')as file_FD:
 smtp.quit()
 ```  
 
-
-<img width="" height="" src="./image/emailImage.png"/>
 이메일로 전송된 사진  
+<img width="" height="" src="./image/emailImage.png"/>
+
   
 **이메일 전송 시 발생한 문제**  
-<img width="" height="" src="./image/emailProblem.png"/>  
 
 **발생한 문제 1**  
+<img width="" height="" src="./image/emailProblem.png"/>  
 - 해당 코드를 실행 하는 경우, 사용자 인증 문제가 발생  
  
-
 **해결 방법**  
 - 해당 구글 계정의 ‘앱 비밀번호’를 생성 후 코드 수정  
 <img width="" height="" src="./image/emailSolution.png"/>  
 
 
 **발생한 문제 2**  
+<img width="" height="" src="./image/emailSolution2.png"/>  
 - Python 3가 설치되었음에도 불구하고 기존 Python 2.7로 실행
-<img width="" height="" src="./image/emailSolution2.png"/> 
+
 
 **해결 방법**  
 $sudo pip install matplotlib 실행  
