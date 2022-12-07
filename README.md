@@ -5,32 +5,38 @@
 ## 01. 프로젝트 개요
 
 ### 01-1 실내 흡연 피해 사례
--아파트 등 공동주택에서 간접흡연을 호소하는 민원 증가  
--이웃 간 갈등이나 폭행 사태로 번지기도  
--금연아파트라도 복도·계단 등 사각지대 많아  
--간접흡연은 직접흡연보다 더 건강에 해로워 2차·3차 피해 우려  
-  
-=> **흡연 방지 시스템의 필요성 대두**
+- 아파트 등 공동주택에서 간접흡연을 호소하는 민원 증가  
+- 이웃 간 갈등이나 폭행 사태로 번지기도  
+- 금연아파트라도 복도·계단 등 사각지대 많아  
+- 간접흡연은 직접흡연보다 더 건강에 해로워 2차·3차 피해 우려  
+
+=> **흡연 방지 시스템의 필요성 대두**  
 
 ### 01-2 개발 목표
 **실내 흡연 감지를 통해 신속한 대처가 가능한 알림 시스템 개발**
-<img width="" height="" src="./image/client_result2.png"/> 
+<img width="" height="" src="./image/client_result2.png"/>  
+
+
+
 
 ## 02. 시스템 구성도
 
 ### 02-1 시스템 구성도
-<img width="" height="" src="./image/system.png"/> 
+<img width="" height="" src="./image/system.png"/>  
 
 ### 02-2 시스템 회로도
-<img width="" height="" src="./image/diagram.png"/> 
-    
+<img width="" height="" src="./image/diagram.png"/>  
+
+
+
+
 ## 03. 개발 과정
 
 ### 03-1 맡은 역할
-- MQ-7 센서, LED 제어, 카메라 제어 : 김지연
-- 피에로 부저, SMS 전송 : 이가온
-- 이메일 전송 : 신영진
-- 데이터베이스 : 박준형
+- 김지연: MQ-7 센서, LED 제어, 카메라 제어
+- 이가온: 피에로 부저, SMS 전송
+- 신영진: 이메일 전송
+- 박준형: 데이터베이스  
 
 ### 03-2 개발  
 
@@ -58,7 +64,7 @@
 
 **발생한 문제**
 - 카메라 촬영이 필요 이상으로 발생, 문자메세지와 이메일이 1초에 한번씩 전송
-- 이에 따른 카메라 작동과 SMS 전송 사이 충돌 발생 우려  
+- 이에 따른 카메라 작동과 SMS 전송 사이 충돌 발생 우려    
 
 **해결 방법**
 - 흡연 및 화재 감지 시 다음 센서 감지까지 delay 코드 추가
@@ -66,28 +72,29 @@
 
 
 ### 수동 부저(피에로 부저) 제어  
+
 **감지된 일산화탄소 농도 값에 따라 수동 부저 제어**  
 흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함
 
 ###  LED 제어  
-**감지된 일산화탄소 농도 값에 따라 LED 제어**
+**감지된 일산화탄소 농도 값에 따라 LED 제어**  
 흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함  
 
+<img width="" height="" src="./image/greenLed.png"/> 
 * Green LED
   * 주변 공기의 일산화탄소 농도가 평균치일 때
 => Green LED ON  
-<img width="" height="" src="./image/greenLed.png"/>  
-
+ 
+<img width="" height="" src="./image/redLed.png"/>  
 * Red LED
   * 주변 공기의 일산화탄소 농도가 평소보다 약 10% 이상 짙어지면 흡연으로 인지
 => Red LED ON  
-<img width="" height="" src="./image/redLed.png"/>  
 
+<img width="" height="" src="./image/yellowLed.png"/> 
 * Yellow LED
   * 담배 연기가 아닌 화재로 인한 짙은 연기로 인식
 => Yellow LED ON
-<img width="" height="" src="./image/yellowLed.png"/>  
-
+ 
 
 ###  부저 & LED 코드  
 **흡연 감지**
@@ -110,7 +117,6 @@
 - 라즈베리파이에서 관리자에게 SMS 발송을 위해 twilio 사용
 - twilio는 클라우드 상에서 SMS API, 휴대폰 인증 API, 전화서비스 등을 제공하는 사이트
 <img width="" height="" src="./image/twilio.png"/>  
-<img width="" height="" src="./image/twilioFlow.png"/>  
 
 **Twilio SMS 전송 코드**
 ```python
@@ -118,31 +124,30 @@
 ```
 
 **관리자에게 메세지 전송**  
-<img width="" height="" src="./image/smsSmoke.png"/>  
-일산화탄소 약 10% 이상  =>  흡연감지 
+<img width="300" height="" src="./image/smsSmoke.png"/>  
+일산화탄소 약 10% 이상  =>  흡연감지  
 
-<img width="" height="" src="./image/smsFire.png"/>  
+<img width="300" height="" src="./image/smsFire.png"/>  
 일산화탄소 약 20~25%  => 화재감지  
 
 
 
 ###  이메일 전송
-<img width="" height="" src="./image/emailSmoke.png"/>  
-일산화탄소 약 10% 이상  =>  흡연감지 
+<img width="" height="" src="./image/emailSmoke.png"/>
+일산화탄소 약 10% 이상  =>  흡연감지  
 
-<img width="" height="" src="./image/emailFire.png"/>  
+<img width="" height="" src="./image/emailFire.png"/>
 일산화탄소 약 20~25%  => 화재감지  
  
 **이메일 전송 코드 (흡연 감지 시)**
 ```python
 
 ```
-<img width="" height="" src="./image/emailImage.png"/>  
+<img width="" height="" src="./image/emailImage.png"/>
 이메일로 전송된 사진  
 
 **이메일 전송 시 발생한 문제**  
 <img width="" height="" src="./image/emailProblem.png"/>  
-
 
 **발생한 문제 1**  
 - 해당 코드를 실행 하는 경우, 사용자 인증 문제가 발생  
@@ -150,7 +155,7 @@
 
 **해결 방법**  
 - 해당 구글 계정의 ‘앱 비밀번호’를 생성 후 코드 수정  
-<img width="" height="" src="./image/emailSolution.png"/> 
+<img width="" height="" src="./image/emailSolution.png"/>  
 
 
 **발생한 문제 2**  
