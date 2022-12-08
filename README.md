@@ -8,7 +8,7 @@
 박준형 202044008
 
 
-
+<br/><br/>
 ## 01. 프로젝트 개요
 
 ### 01-1 실내 흡연 피해 사례
@@ -19,23 +19,22 @@
 
 => **흡연 방지 시스템의 필요성 대두**  
 
+<br/><br/>
 ### 01-2 개발 목표
 실내 흡연 감지를 통해 신속한 대처가 가능한 알림 시스템 개발
 <img width="700" height="" src="./image/goal.png"/>  
 
-
-
+<br/><br/><br/>
 ## 02. 시스템 구성도
 
 ### 02-1 시스템 구성도
 <img width="700" height="" src="./image/system.png"/>  
 
+<br/><br/>
 ### 02-2 시스템 회로도
 <img width="700" height="" src="./image/diagram.png"/>  
 
-
-
-
+<br/><br/><br/>
 ## 03. 개발 과정
 
 ### 03-1 맡은 역할
@@ -43,24 +42,27 @@
 - 이가온: 피에조 부저, SMS 전송
 - 신영진: 이메일 전송
 - 박준형: 데이터베이스  
+<br/>
 
 ### 03-2 개발  
 
-> ### MQ-7  가스센서
+> ### MQ-7  가스센서 <br/>
 > **일산화탄소 MQ-7 가스센서 모듈**
 > - MQ-7 가스센서 모듈은 일산화탄소를 공기 중에서 검출 시 사용하는 센서 모듈
 > - 담배연기,  자동차 매연, 라이터 등의 일산화탄소로 구성된 가스 검출 장치에 사용
-> <img width="" height="" src="./image/mq7.png"/>  
+> <img width="" height="" src="./image/mq7.png"/>  <br/><br/>
 > 
-> **일산화탄소 MQ-7 가스센서 모듈 작동 기준**  
-> 담배연기의 주성분인 일산화탄소 등의 농도를 측정해 감지하는 방식으로 오작동을 최소화  
+> **일산화탄소 MQ-7 가스센서 모듈 작동 기준**  <br/>
+> 담배연기의 주성분인 일산화탄소 등의 농도를 측정해 감지하는 방식으로 오작동을 최소화  <br/><br/>
 > 
 > **세팅 농도**  
 > - 약 10% 이상 : 주변 공기의 일산화탄소 농도가 평소보다 약 10% 이상 짙어지면 흡연 인지  
 > - 약 20~25% :  담배 연기가 아닌 화재로 인한 짙은 연기에만 반응하므로 화재 경보로 사용  
 >   
-> => **흡연 감지 시 경고음 발생, 현재 상황을 실시간으로 모니터링할 수 있어 상황에 맞게 유동적인 대처 가능**
+> => **흡연 감지 시 경고음 발생, 현재 상황을 실시간으로 모니터링할 수 있어 상황에 맞게 유동적인 대처 가능** <br/><br/><br/>
 > 
+> 
+> **라즈베리파이 내 MQ7 센서 값 추출 코드**
 > ```python
 > if seri.readable():
 > 	ret = seri.readline()
@@ -75,10 +77,10 @@
 > 		#아두이노에서 받아온 값을 확인 후 작업 수행(카메라 촬영, sms/email 전송)
 > 		check_smoke(res)
 > ```
-
+<br/><br/>
 > ### 카메라
 > **흡연 및 화재 감지 시 카메라 작동**
-> <img width="" height="" src="./image/camera.png"/>  
+> <img width="" height="" src="./image/camera.png"/>  <br/><br/>
 > 
 > **카메라 작동 코드**  
 > ```python
@@ -95,21 +97,21 @@
 > camera.stop_preview()
 > camera.close()
 > 
-> ```
-> **카메라 작동 조작 시 고려한 점**  
-> 일산화탄소 센서 값은 1초에 한 번씩 측정되므로 흡연 및 화재 감지 시 1초마다 카메라가 작동하게 됨  
+> ``` 
+> <br/>**카메라 작동 조작 시 고려한 점**  
+> 일산화탄소 센서 값은 1초에 한 번씩 측정되므로 흡연 및 화재 감지 시 1초마다 카메라가 작동하게 됨  <br/><br/>
 > 
-> **발생한 문제**
+> **발생한 문제**  <br/>
 > - 카메라 촬영이 필요 이상으로 발생, 문자메세지와 이메일이 1초에 한번씩 전송
-> - 이에 따른 카메라 작동과 SMS 전송 사이 충돌 발생 우려    
+> - 이에 따른 카메라 작동과 SMS 전송 사이 충돌 발생 우려    <br/><br/>
 > 
-> **해결 방법**
+> **해결 방법**  <br/>
 > - 흡연 및 화재 감지 시 다음 센서 감지까지 delay 코드 추가
 > - 흡연 감지 시: 1분 delay, 화재 감지 시: 30초 delay  
 
-
+<br/><br/>
 > ###  LED 제어  
-> **감지된 일산화탄소 농도 값에 따라 LED 제어**  
+> **감지된 일산화탄소 농도 값에 따라 LED 제어**  <br/><br/>
 > 
 > <img width="" height="" src="./image/greenLed.png"/>
 > 
@@ -125,13 +127,13 @@
 > * Yellow LED : 담배 연기가 아닌 화재로 인한 짙은 연기로 인식
  
  
- 
+ <br/><br/>
 > ### 수동 부저(피에로 부저) 제어  
 > 
-> **감지된 일산화탄소 농도 값에 따라 수동 부저 제어**  
+> **감지된 일산화탄소 농도 값에 따라 수동 부저 제어**  <br/>
 > 흡연을 감지했을 때와 화재를 감지했을 때 각각 다른 부저의 울림을 통해 쉽게 구분, 신속한 대처가 가능하도록 함
 
-
+<br/><br/>
 > ###  LED 및 부저 작동 코드  
 > 
 > **화재 감지**
@@ -176,13 +178,13 @@
 >     digitalWrite(yellowLed,LOW);
 > }
 > ```
-
+<br/><br/>
 > ###  SMS 전송  
 > 
 > **Twilio**
 > - 라즈베리파이에서 관리자에게 SMS 발송을 위해 twilio 사용
 > - twilio는 클라우드 상에서 SMS API, 휴대폰 인증 API, 전화서비스 등을 제공하는 사이트
-> <img width="" height="" src="./image/twilio.png"/>  
+> <img width="" height="" src="./image/twilio.png"/>  <br/><br/>
 > 
 > 
 > **Twilio SMS 전송 코드**
@@ -199,10 +201,10 @@
 >     from_='+14254752226',   #부여 받은(메시지를 보낼) 전화번호
 >     to='+821083846247'      #메세지를 받을 전화번호
 > )
-> ```
+> ``` 
 > 
 > 
-> **관리자에게 메세지 전송**  
+> <br/><br/> **관리자에게 메세지 전송**  
 > 
 > 일산화탄소 약 10% 이상  =>  흡연감지  
 > <img width="300" height="" src="./image/smsSmoke.png"/>  
@@ -211,7 +213,7 @@
 > <img width="300" height="" src="./image/smsFire.png"/>
 
 
-
+<br/><br/>
 
 > ###  이메일 전송  
 > 
@@ -223,7 +225,7 @@
 > 
 > 
 > 이메일로 전송된 사진  
-> <img width="" height="" src="./image/emailImage.png"/>
+> <img width="" height="" src="./image/emailImage.png"/> <br/><br/>
 > 
 > 
 > **이메일 전송 코드 (흡연 감지 시)**
@@ -251,63 +253,67 @@
 > ```  
 > 
 >   
-> **이메일 전송 시 발생한 문제**  
+> <br/><br/><br/> **이메일 전송 시 발생한 문제**  
 >
 >   
 > > **발생한 문제 1.**  
 > > - 해당 코드를 실행 하는 경우, 사용자 인증 문제가 발생  
-> > <img width="" height="" src="./image/emailProblem.png"/>  
+> > <img width="" height="" src="./image/emailProblem.png"/>  <br/><br/>
 > >  
 > > **해결 방법**  
 > > - 해당 구글 계정의 ‘앱 비밀번호’를 생성 후 코드 수정  
-> > <img width="" height="" src="./image/emailSolution.png"/>  
+> > <img width="" height="" src="./image/emailSolution.png"/>  <br/><br/><br/>
 > 
 >   
 > > **발생한 문제 2.**  
 > > - Python 3가 설치되었음에도 불구하고 기존 Python 2.7로 실행
-> > <img width="" height="" src="./image/emailSolution2.png"/>  
+> > <img width="" height="" src="./image/emailSolution2.png"/>  <br/><br/>
 > > 
 > > **해결 방법**  
 > > $sudo pip install matplotlib 실행  
 > > -> 같은 오류 반복  
 > > -> 다른 라즈베리파이 사용  
 
-
+<br/><br/>
 > ###  데이터베이스  
 > **데이터베이스 저장 과정**  
-> <img width="" height="" src="./image/database.png"/>  
+> <img width="" height="" src="./image/database.png"/>  <br/><br/>
 > 
 > **MQ-7 센서에서 받아온 값을 데이터베이스에 저장하는 코드**
 > ```python
+> kstDate = datetime.now() + timedelta(hours=9)
+> date = kstDate.strftime("%y%m%d_%H:%M")
 > data = [{
 >     'measurement' : 'pir',        
 >     'tags':{
-> 	'VisionUni' : '2410',
+>  'VisionUni' : '2410',
 >     },
 >     'fields':{
-> 	"date": date,            #측정 날짜
-> 	"concentration" : res    #측정 데이터 값
+>  "date": date,
+>  "concentration" : res
 >     }
 > }]
-> client = None
-> 
+> dbClient = None
+>
+> #DB connect
 > try:
->     #데이터베이스 접속 코드
->     client = influxdb('localhost',8086,'root','root','pir') #connecting to influx db
->     except Exception as e:
+>     dbClient = influxdb('localhost',8086,'root','root','pir') #connecting to influx db #ip, port, id, pw
+>     print("db con ok")
+> except Exception as e:
 >     print ("Exception" + str(e))
-> 
+>
+> # DB 값 저장
 > if client is not None:
 >     try:
-> 	 client.write_points(data) #write
->     except Exception as e:
-> 	 print ("Exception write " + str(e))
->     finally:
-> 	 client.close()
-> #print("running influxdb OK")
+>       dbClient.write_points(data) #write
+>       print("running influxdb OK")
+>  except Exception as e:
+>       print ("!!Exception write " + str(e))
+>  finally:
+>       dbClient.close()
 > ```
 
-
+<br/><br/><br/>
 ## 04. 프로젝트를 마치며
 ### 기대효과  
 1. 금연구역 관리자의 현장을 적발 도움
